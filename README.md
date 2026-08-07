@@ -63,33 +63,39 @@ namespace Juego {
         +isFull() boolean
         +esGanador(sim Simbolo) boolean
         +esEmpate() boolean
+        -verificarFilas(sim Simbolo) boolean
+        -verificarColumnas(sim Simbolo) boolean
+        -verificarDiagonales(sim Simbolo) boolean
         +getSimbolos() Simbolo[][]
         +esPosValida(fila int, col int) boolean $
         +getCasillasVacias() List~Integer[]~
         +getCasillasCon(sim Simbolo) List~Integer[]~
-        +copy() Tablero
+        +clone() Tablero
     }
     
     class Partida {
         -tablero Tablero
         -jugadores Jugador[]
         -indiceJugadorActual int
+        -movimientosRealizados int
         +iniciarPartida()
         +realizarMovimiento(posFila int, posCol int)
         +cambiarTurno()
         +hayGanador() boolean
-
+        +esEmpate() boolean
+        +isGameOver() boolean
+        +getGanador() Jugador
+        +getJugadorActual() Jugador
+        +getTablero() Tablero
+        +getMovimientosRealizados() int
     }
     
     class Jugador {
-        <<abstract>>
         #simbolo Simbolo
         +getSimbolo() Simbolo
-        +realizarMovimiento(tablero Tablero)* Movimiento
     }
     
     class JugadorHumano {
-        +realizarMovimiento(tablero Tablero) Movimiento
     }
     
     class Movimiento {
