@@ -137,6 +137,31 @@ namespace Computador {
     }
 }
 
+namespace Controllers {
+    class PartidaController {
+        -partida Partida
+        -vista PartidaView
+        +PartidaController(partida Partida, vista PartidaView)
+        +iniciarJuego()
+        +onCasillaSeleccionada(fila int, col int)
+        -procesarTurnoComputador()
+        -actualizarEstadoVisual()
+    }
+}
+
+namespace UI {
+    class PartidaView {
+        <<interface>>
+        +actualizarTablero(tablero Tablero)
+        +mostrarTurnoActual(jugador Jugador)
+        +mostrarGanador(ganador Jugador)
+        +mostrarEmpate()
+        +mostrarError(mensaje String)
+        +mostrarMensaje(mensaje String)
+        +obtenerCasilla() Movimiento
+    }
+}
+
 Partida "1" *-- "1" Tablero : compone
 Partida "1" o-- "2" Jugador : tiene
 Jugador <|-- JugadorComputador
@@ -151,6 +176,9 @@ MiniMax ..> ArbolTablero : genera/evalua
 ArbolTablero "1" *-- "1" NodoTablero : tiene raíz
 NodoTablero --> Tablero : contiene
 NodoTablero "1" o-- "*" ArbolTablero : tiene hijos
+
+PartidaController o-- Partida : gestiona
+PartidaController o-- PartidaView : actualiza
 ```
 ###  Descripción de Componentes Principales
 
