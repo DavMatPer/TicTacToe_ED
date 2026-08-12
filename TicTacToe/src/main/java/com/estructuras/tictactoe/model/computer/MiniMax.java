@@ -7,7 +7,5 @@ package com.estructuras.tictactoe.model.computer;
  */
 public class MiniMax {
 
-    public void getAlgo() {
-        System.out.println("msj");
-    }
+    
 }
