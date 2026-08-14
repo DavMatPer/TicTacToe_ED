@@ -35,8 +35,6 @@ Donde $P$ representa el número de líneas (filas, columnas y diagonales) aún d
 El sistema está diseñado modularmente para soportar las siguientes capacidades avanzadas:
 
 - [ ] ** Recomendador de Jugadas:** Asistente integrado que sugiere al jugador humano la casilla óptima a marcar analizando el estado del árbol.
-- [ ] ** Depurador de Utilidad en Tiempo Real:** Panel gráfico que muestra las jugadas candidatas evaluadas por la IA junto con sus valores de utilidad calculados ($u_{\min}$ y $u_{\max}$).
-- [ ] ** Inspector Visual del Árbol de Decisiones:** Renderizado gráfico interactivo de la estructura jerárquica del árbol $N$-ario generado durante el turno de la computadora.
 - [ ] ** Persistencia de Partidas:** Opciones para guardar el estado actual de una partida en disco y reanudarla posteriormente.
 
 ---
@@ -137,6 +135,31 @@ namespace Computador {
     }
 }
 
+namespace Controllers {
+    class PartidaController {
+        -partida Partida
+        -vista PartidaView
+        +PartidaController(partida Partida, vista PartidaView)
+        +iniciarJuego()
+        +onCasillaSeleccionada(fila int, col int)
+        -procesarTurnoComputador()
+        -actualizarEstadoVisual()
+    }
+}
+
+namespace UI {
+    class PartidaView {
+        <<interface>>
+        +actualizarTablero(tablero Tablero)
+        +mostrarTurnoActual(jugador Jugador)
+        +mostrarGanador(ganador Jugador)
+        +mostrarEmpate()
+        +mostrarError(mensaje String)
+        +mostrarMensaje(mensaje String)
+        +obtenerCasilla() Movimiento
+    }
+}
+
 Partida "1" *-- "1" Tablero : compone
 Partida "1" o-- "2" Jugador : tiene
 Jugador <|-- JugadorComputador
@@ -151,6 +174,9 @@ MiniMax ..> ArbolTablero : genera/evalua
 ArbolTablero "1" *-- "1" NodoTablero : tiene raíz
 NodoTablero --> Tablero : contiene
 NodoTablero "1" o-- "*" ArbolTablero : tiene hijos
+
+PartidaController o-- Partida : gestiona
+PartidaController o-- PartidaView : actualiza
 ```
 ###  Descripción de Componentes Principales
 
@@ -164,8 +190,8 @@ NodoTablero "1" o-- "*" ArbolTablero : tiene hijos
 ##  Tecnologías Utilizadas
 
 * **Lenguaje:** Java 11+
-* **Interfaz Gráfica:** JavaFX / Android Studio
-* **Entorno de Desarrollo:** NetBeans / IntelliJ IDEA / Android Studio
+* **Interfaz Gráfica:** JavaFX
+* **Entorno de Desarrollo:** NetBeans / IntelliJ IDEA / VSCode
 * **Estructuras de Datos:** 
   * Árbol $N$-ario (Implementación nativa/propia)
   * Colecciones lineales (`List`, `ArrayList` del *Java Collection Framework*)
