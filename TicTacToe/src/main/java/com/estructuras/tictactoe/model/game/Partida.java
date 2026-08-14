@@ -1,10 +1,13 @@
 package com.estructuras.tictactoe.model.game;
 
+import java.io.Serializable;
+
 /**
  *
  * @author david
  */
-public class Partida {
+public class Partida implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Tablero tablero;
     private Jugador[] jugadores;
     private int indiceJugadorActual;

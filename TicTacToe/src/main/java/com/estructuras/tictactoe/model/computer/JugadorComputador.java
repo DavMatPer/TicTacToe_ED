@@ -1,11 +1,15 @@
 package com.estructuras.tictactoe.model.computer;
 
+import java.io.Serializable;
+
 import com.estructuras.tictactoe.model.game.Jugador;
 import com.estructuras.tictactoe.model.game.Movimiento;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.game.Tablero;
 
-public class JugadorComputador extends Jugador {
+public class JugadorComputador extends Jugador implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     public JugadorComputador(Simbolo simbolo) {
         super(simbolo);
     }
