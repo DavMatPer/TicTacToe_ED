@@ -107,10 +107,8 @@ public class PartidaSerializer {
         File file = new File(rutaArchivo);
         RegistroPartida registro = null;
 
-        if (!file.exists()) 
-            throw new IOException("El archivo no existe");
-        if (file.length() == 0) 
-            throw new IOException("El archivo está vacío");
+        if (!file.exists() || file.length() == 0) 
+            return partidas;
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             while ((registro = leerRegistro(ois)) != null) {
