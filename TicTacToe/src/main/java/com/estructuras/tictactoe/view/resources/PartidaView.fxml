@@ -48,4 +48,18 @@
         </VBox>
         
     </StackPane>
+    
+    <!-- CAPA 3:  MODAL SUPERPUESTO DE PARTIDA TERMINADA-->
+    <StackPane fx:id="modalFinal" visible="false" style="-fx-background-color: rgba(0, 0, 0, 0.7);">
+        
+        <!-- Cuadro de diálogo central -->
+        <VBox alignment="CENTER" spacing="20.0" maxWidth="400" maxHeight="200" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 5);">
+            <Label fx:id="lblGanador" text="" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+          
+            <HBox alignment="CENTER" spacing="15.0">
+                <Button text="Aceptar" onAction="#ocultarModalFinal" style="-fx-padding: 8 15;" />
+            </HBox>
+        </VBox>
+        
+    </StackPane>
 </StackPane>

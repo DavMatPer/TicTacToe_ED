@@ -4,7 +4,9 @@
  */
 package com.estructuras.tictactoe.view.controllers;
 
+import com.estructuras.tictactoe.model.game.Partida;
 import com.estructuras.tictactoe.model.persistencia.PartidaSerializer;
+import com.estructuras.tictactoe.model.persistencia.RutaGuardado;
 import com.estructuras.tictactoe.view.Navegacion;
 import java.io.IOException;
 import java.util.List;
@@ -36,7 +38,7 @@ public class CargaViewController  {
     @FXML
     private Button btnVolber;
     
-    private String ruta_archivo = "partida.dat";
+    private String RUTA_ARCHIVO = RutaGuardado.getRuta();
     
     @FXML
     public void initialize() {
@@ -50,7 +52,7 @@ public class CargaViewController  {
     
     private void cargarListaDePartidas() {
         try {
-            List<String> partidas = PartidaSerializer.obtenerPartidasGuardadas(ruta_archivo);
+            List<String> partidas = PartidaSerializer.obtenerPartidasGuardadas(RUTA_ARCHIVO);
             
             lblSinPartidas.setVisible(partidas.isEmpty());
             scrollPanePartidas.setVisible(!partidas.isEmpty());
@@ -93,10 +95,19 @@ public class CargaViewController  {
             System.out.println("Intentando restaurar partida: " + nombrePartida);
             try {
                 // Restauramos y consumimos la partida
-                var partidaRestaurada = PartidaSerializer.cargarPartida(nombrePartida, ruta_archivo);
+                Partida partidaRestaurada = PartidaSerializer.cargarPartida(nombrePartida, RUTA_ARCHIVO);
                 
                 System.out.println("Partida cargada exitosamente. ¡A jugar!");
-                // Aquí deberías cambiar de escena al Tablero y pasarle la partidaRestaurada
+                
+                PartidaViewController controladorDestino = Navegacion.avanzarConControlador(
+                    e, 
+                    this, 
+                    "PartidaView.fxml"
+                );
+                
+                if ( controladorDestino != null) {
+                    controladorDestino.setPartida(partidaRestaurada);
+                }
                 
             } catch (Exception ex) {
                 System.err.println("No se pudo cargar la partida: " + ex.getMessage());
