@@ -39,7 +39,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <!-- Aquí pones la ruta de la clase que arrancará tu aplicación -->
-                    <mainClass>com.tictactoe.ui.MainApp</mainClass> 
+                    <mainClass>com.estructuras.tictactoe.TicTacToe</mainClass> 
                 </configuration>
             </plugin>
             <plugin>
@@ -48,5 +48,19 @@
                 <version>3.2.5</version>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

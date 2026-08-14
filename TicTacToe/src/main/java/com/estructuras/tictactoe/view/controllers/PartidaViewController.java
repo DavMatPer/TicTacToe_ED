@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package com.estructuras.tictactoe.view;
+package com.estructuras.tictactoe.view.controllers;
 
 import com.estructuras.tictactoe.model.game.Partida;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.persistencia.PartidaSerializer;
 import com.estructuras.tictactoe.model.persistencia.RegistroPartida;
+import com.estructuras.tictactoe.view.Navegacion;
 
 import java.io.IOException;
 import java.net.URL;
@@ -176,14 +177,6 @@ public class PartidaViewController implements Initializable {
     }
 
     private void ejecutarRetornoAlMenu(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuView.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            System.err.println("Error al regresar al menú: " + e.getMessage());
-        }
+        Navegacion.avanzar(event, this, "MenuView.fxml");
     }
 }

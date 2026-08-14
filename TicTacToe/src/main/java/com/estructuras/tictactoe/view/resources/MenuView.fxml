@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" 
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.estructuras.tictactoe.view.controllers.MenuViewController" 
+      alignment="CENTER" spacing="20">
+
+    <!-- Un texto simple -->
+    <Label text="Tres en Raya - Estructuras de Datos" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <!-- Un botón con fx:id para usarlo en Java y onAction para detectar el clic -->
+    <Button fx:id="btnNuevaPartida" text="Nueva Partida" onAction="#iniciarNuevaPartida"/>
+    <Button fx:id="btnCargarPartida" text="Cargar Partida" onAction="#cargarPartidaGuardada"/>
+
+</VBox>

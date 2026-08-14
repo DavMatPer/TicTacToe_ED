@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.estructuras.tictactoe.view.controllers.PartidaViewController">
+    
+    <!-- CAPA 1: PANTALLA DE JUEGO PRINCIPAL -->
+    <VBox alignment="CENTER" spacing="30.0" style="-fx-padding: 40; -fx-background-color: #f0f0f0;">
+        
+        <!-- Indicador de Turno -->
+        <Label fx:id="lblTurno" text="Turno de Jugador 1" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #333333;" />
+
+        <!-- El Tablero (Los botones se inyectarán desde el controlador) -->
+        <GridPane fx:id="gridTablero" alignment="CENTER" hgap="10" vgap="10">
+            <!-- Vacío en FXML, poblado en Java -->
+        </GridPane>
+
+        <!-- Botones Inferiores -->
+        <HBox alignment="CENTER" spacing="40.0">
+            <Button text="Volver al Menú" onAction="#mostrarModalGuardar" style="-fx-background-radius: 25; -fx-padding: 10 30; -fx-font-size: 16px; -fx-background-color: #757575; -fx-text-fill: white;" />
+            <Button text="Pedir Pista" onAction="#solicitarPista" style="-fx-background-radius: 25; -fx-padding: 10 30; -fx-font-size: 16px; -fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" />
+        </HBox>
+        
+    </VBox>
+
+    <!-- CAPA 2: MODAL SUPERPUESTO DE GUARDADO (Oculto por defecto) -->
+    <!-- El fondo semi-transparente oscurece el tablero -->
+    <StackPane fx:id="modalGuardar" visible="false" style="-fx-background-color: rgba(0, 0, 0, 0.7);">
+        
+        <!-- Cuadro de diálogo central -->
+        <VBox alignment="CENTER" spacing="20.0" maxWidth="400" maxHeight="200" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 5);">
+            <Label text="¿Deseas guardar antes de salir?" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            
+            <TextField fx:id="txtNombreGuardado" promptText="Asigna un nombre a tu partida..." style="-fx-font-size: 14px;" />
+            
+            <HBox alignment="CENTER" spacing="15.0">
+                <Button text="Guardar" onAction="#guardarYSalir" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 8 15;" />
+                <Button text="Salir sin guardar" onAction="#salirSinGuardar" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-padding: 8 15;" />
+                <Button text="Cancelar" onAction="#ocultarModalGuardar" style="-fx-padding: 8 15;" />
+            </HBox>
+        </VBox>
+        
+    </StackPane>
+</StackPane>

@@ -1,4 +1,4 @@
-package com.estructuras.tictactoe.view;
+package com.estructuras.tictactoe.view.controllers;
 
 import com.estructuras.tictactoe.model.game.Jugador;
 import com.estructuras.tictactoe.model.computer.JugadorComputador;
@@ -6,20 +6,15 @@ import com.estructuras.tictactoe.model.game.JugadorHumano;
 import com.estructuras.tictactoe.model.game.Partida;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.game.Tablero;
+import com.estructuras.tictactoe.view.Navegacion;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.stage.Stage;
 
 public class SeleccionController implements Initializable {
 
@@ -79,25 +74,17 @@ public class SeleccionController implements Initializable {
 
     @FXML
     private void volverMenu(ActionEvent event) {
+        System.out.println("Volver al Menu");
         Navegacion.avanzar(event,this, "MenuView.fxml");
     }
     
     // --- Métodos Auxiliares de Navegación ---
     
     private void cambiarVistaJuego(ActionEvent event, Partida partida) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("PartidaView.fxml"));
-            Parent root = loader.load();
-            
-            // Aquí es donde inyectas la lógica de la partida a tu próximo controlador
-            // PartidaViewController controller = loader.getController();
-            // controller.setPartida(partida);
-            
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            System.err.println("Error al iniciar el juego: " + e.getMessage());
+        PartidaViewController controladorPartida = Navegacion.avanzarConControlador(event, this, "PartidaView.fxml");
+        
+        if ( controladorPartida != null) {
+            controladorPartida.setPartida(partida);
         }
     }
 }

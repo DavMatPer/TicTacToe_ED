@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package com.estructuras.tictactoe.view;
+package com.estructuras.tictactoe.view.controllers;
 
 import com.estructuras.tictactoe.model.persistencia.PartidaSerializer;
+import com.estructuras.tictactoe.view.Navegacion;
 import java.io.IOException;
 import java.util.List;
 import javafx.event.Event;
@@ -44,11 +45,7 @@ public class CargaViewController  {
     
     public void volverAlMenu(Event evento) {
         System.out.println("Volver al Menú.");
-        Stage stage = Navegacion.avanzar(evento, this, "MenuView.fxml" );
-        if (stage == null) {
-            return;
-        }
-        stage.show();
+        Navegacion.avanzar(evento, this, "MenuView.fxml" );
     }
     
     private void cargarListaDePartidas() {
