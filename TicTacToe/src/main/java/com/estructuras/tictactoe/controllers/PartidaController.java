@@ -28,7 +28,7 @@ public class PartidaController {
     public void onCasillaSeleccionada(int row, int col) {
         if (!partida.realizarMovimiento(row, col)) return;
 
-        view.mostrarTablero(partida.getTablero());
+        view.actualizarTablero(partida.getTablero());
         if (partida.hayGanador()) {
             view.mostrarGanador(partida.getJugadorActual());
         } else if (partida.isGameOver()) {
@@ -52,6 +52,14 @@ public class PartidaController {
     private void actualizarEstadoVisual() {
         view.mostrarTurnoActual(partida.getJugadorActual());
         view.actualizarTablero(partida.getTablero());
+    }
+    
+    /**
+     * Indica si la partida ya ha finalizado
+     * @return true si ya finalizó
+     */
+    public boolean finPartida() {
+        return partida.isGameOver();
     }
 
 }
