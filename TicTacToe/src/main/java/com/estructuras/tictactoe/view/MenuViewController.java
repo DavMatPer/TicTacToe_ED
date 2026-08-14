@@ -5,9 +5,15 @@
 package com.estructuras.tictactoe.view;
 
 
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -27,13 +33,21 @@ public class MenuViewController   {
     @FXML
     private void iniciarNuevaPartida(ActionEvent event) {
         System.out.println("Clic detectado: Preparando nueva partida...");
-        // Aquí llamarás a la lógica de tu PartidaController o cambiarás de pantalla
+        Stage stage = Navegacion.avanzar(event, this, "Seleccion.fxml");
+        if (stage == null) {
+            return;
+        }
+        stage.show();
     }
 
     @FXML
     private void cargarPartidaGuardada(ActionEvent event) {
         System.out.println("Clic detectado: Abriendo menú de guardados...");
-        // Aquí puedes invocar a PartidaSerializer.obtenerPartidasGuardadas()
+        Stage stage = Navegacion.avanzar(event, this, "CargaView.fxml");
+        if (stage == null) {
+            return;
+        }
+        stage.show();
     }
     
 }

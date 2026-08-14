@@ -1,6 +1,7 @@
 package com.estructuras.tictactoe.model.game;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  *
@@ -40,6 +41,12 @@ public class Partida implements Serializable{
 
     public Partida(Jugador jugador1, Jugador jugador2, int indiceJugadorActual) {
         this(new Tablero(), new Jugador[]{jugador1, jugador2}, indiceJugadorActual);
+    }
+    
+    public Partida( Tablero tablero, Jugador[] jugadores) {
+       this.tablero = tablero;
+       this.jugadores = jugadores;
+       escogerJugador();
     }
 
     public void iniciarPartida() {
@@ -117,5 +124,11 @@ public class Partida implements Serializable{
         return movimientosRealizados;
     }
 
-
+    /**
+     * Escoge un jugador random para inciar.
+     */
+    private void escogerJugador(){    
+        Random rand = new Random();
+        indiceJugadorActual  = rand.nextInt(2);
+    }
 }
