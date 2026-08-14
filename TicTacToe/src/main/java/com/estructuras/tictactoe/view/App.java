@@ -10,20 +10,25 @@ import javafx.stage.Stage;
 public class App extends Application{
     @Override
     public void start(Stage escenarioPrincipal) {
-        // Leemos el archivo FXML
-        // Nota: Asegúrate de que el FXML esté en la misma ruta de paquetes o en la carpeta 'resources'
-        FXMLLoader cargador = new FXMLLoader(getClass().getResource("MenuView.fxml"));
+        // Usamos tu clase de Navegacion para obtener la ruta absoluta segura
+        FXMLLoader cargador = new FXMLLoader(getClass().getResource(Navegacion.rutaFXML("MenuView.fxml")));
         
-        // Esto lee el XML, crea los botones en memoria e instancia tu MenuController automáticamente
         Parent raiz;
         try {
             raiz = cargador.load();
         } catch (IOException e) {
-            raiz  = null;
+            System.err.println("Error al cargar la vista inicial: " + e.getMessage());
+            return; 
         }
-        // Ponemos la vista en la ventana y la mostramos
-        Scene escena = new Scene(raiz, 600, 400);
-        escenarioPrincipal.setTitle("Tic Tac Toe");
+        
+        
+        Scene escena = new Scene(raiz, 700, 500); 
+        escenarioPrincipal.setTitle("Tres en Raya");
+        
+        // Bloqueamos un tamaño mínimo para que el diseño no se aplaste
+        escenarioPrincipal.setMinWidth(650);
+        escenarioPrincipal.setMinHeight(450);
+        
         escenarioPrincipal.setScene(escena);
         escenarioPrincipal.show();
     }

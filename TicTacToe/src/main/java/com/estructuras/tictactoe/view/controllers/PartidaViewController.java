@@ -50,9 +50,11 @@ public class PartidaViewController implements Initializable {
     private Partida partidaActual;
     private PartidaController controladorPartida;
     private Button[][] matrizBotones;
+    private PauseTransition transicionPista;
+    
     private final String RUTA_ARCHIVO = RutaGuardado.getRuta();
-    private final String ESTILO_BOTON_NORMAL = "-fx-font-size: 48px; -fx-font-weight: bold; -fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-cursor: hand;";
-    private final String ESTILO_BOTON_PISTA = "-fx-font-size: 48px; -fx-font-weight: bold; -fx-background-color: #FFF9C4; -fx-border-color: #FBC02D; -fx-border-width: 4; -fx-cursor: hand;";
+    private final String ESTILO_BOTON_NORMAL = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);";
+    private final String ESTILO_BOTON_PISTA = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: #FFF9C4; -fx-border-color: #FF9F1C; -fx-border-width: 4; -fx-border-radius: 12; -fx-background-radius: 15; -fx-cursor: hand;";
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -81,24 +83,33 @@ public class PartidaViewController implements Initializable {
         for (int fila = 0; fila < 3; fila++) {
             for (int col = 0; col < 3; col++) {
                 Button btnCasilla = new Button("");
-                btnCasilla.setPrefSize(120, 120);
                 
-                // Estilo para que parezca una cuadrícula clásica de Tres en Raya
-                btnCasilla.setStyle(ESTILO_BOTON_NORMAL);
+            ; 
                 
-                // Capturamos las coordenadas de este botón específico
+                btnCasilla.setMinSize(80, 80);
+                btnCasilla.setMaxSize(80, 80);
+                btnCasilla.setPrefSize(80, 80);
+                
+                // Aplicamos la clase CSS en lugar del texto en duro
+                btnCasilla.getStyleClass().add("casilla-juego"); 
+                
                 final int f = fila;
                 final int c = col;
                 
                 btnCasilla.setOnAction(e -> alClickearCasilla(f, c));
                 
                 matrizBotones[fila][col] = btnCasilla;
-                gridTablero.add(btnCasilla, col, fila); // Añadir al GridPane (Nodo, Columna, Fila)
+                gridTablero.add(btnCasilla, col, fila); 
             }
         }
     }
 
     private void alClickearCasilla(int fila, int col) {
+        if (transicionPista != null && transicionPista.getStatus() == javafx.animation.Animation.Status.RUNNING) {
+            transicionPista.stop();
+            actualizarVistaTablero(); 
+        } 
+        
         // 1. Invocar a la lógica de tu modelo (Asegúrate de tener un método similar en Partida)
         // boolean movimientoValido = partidaActual.registrarMovimiento(fila, col);
         
@@ -110,7 +121,8 @@ public class PartidaViewController implements Initializable {
             casilla.setText(
                     partidaActual.getJugadorActual().getSimbolo().toString()
             );
-            if (partidaActual.isGameOver()) { 
+            if (partidaActual.isGameOver()) {
+                actualizarVistaTablero();
                 mostrarModalFinal();
                 return;
             }
@@ -120,40 +132,57 @@ public class PartidaViewController implements Initializable {
     }
 
     private void actualizarVistaTablero() {
-        // Recorremos tu Tablero (lógica) y pintamos las X y O correspondientes
-        
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
+                Button btn = matrizBotones[j][i];
                 Simbolo sim = partidaActual.getTablero().getTablero()[i][j];
-                if (sim == Simbolo.X) matrizBotones[j][i].setText("X");
-                else if (sim == Simbolo.O) matrizBotones[j][i].setText("O");
                 
-                // Restauramos el estilo por si alguna casilla estaba iluminada como "pista"
-                matrizBotones[j][i].setStyle(ESTILO_BOTON_NORMAL);
+                // Limpiamos estilos previos de colores o pistas
+                btn.getStyleClass().removeAll("simbolo-x", "simbolo-o", "casilla-pista");
+                
+                if (null == sim) {
+                    btn.setText("");
+                } else switch (sim) {
+                    case X:
+                        btn.setText("X");
+                        btn.getStyleClass().add("simbolo-x"); // Pinta la X de turquesa
+                        break;
+                    case O:
+                        btn.setText("O");
+                        btn.getStyleClass().add("simbolo-o"); // Pinta la O de naranja
+                        break;
+                    default:
+                        btn.setText("");
+                        break;
+                }
             }
         }
         lblTurno.setText("Turno de: " + partidaActual.getJugadorActual().getSimbolo());
-        
     }
 
     @FXML
     private void solicitarPista(ActionEvent event) {
         System.out.println("Llamando al árbol N-ario / Minimax...");
         
+        if (transicionPista != null && transicionPista.getStatus() == javafx.animation.Animation.Status.RUNNING) {
+            return;
+        }
+        
         // Simulación: Supongamos que Minimax recomienda la fila 1, columna 1
         int filaSugerida = 1;
         int colSugerida = 1;
         
         Button btnSugerido = matrizBotones[filaSugerida][colSugerida];
+        if (false) return; //TODO que la pista no sea en una casilla ocupada.
         
         // Iluminamos la casilla de color amarillo dorado
-        btnSugerido.setStyle(ESTILO_BOTON_PISTA);
+        btnSugerido.getStyleClass().add("casilla-pista");
         
-        PauseTransition pausa = new PauseTransition(Duration.seconds(1.5));
-        pausa.setOnFinished(e -> {
+        transicionPista = new PauseTransition(Duration.seconds(1.5));
+        transicionPista.setOnFinished(e -> {
             actualizarVistaTablero();
         });
-        pausa.play();
+        transicionPista.play();
     }
 
     // ==========================================
@@ -264,8 +293,12 @@ public class PartidaViewController implements Initializable {
     }
     
     public void mostrarModalFinal() {
-        Simbolo sim = partidaActual.getJugadorActual().getSimbolo();
-        lblGanador.setText("Ganador: Jugador " + sim.toString());
+        if ( partidaActual.hayGanador()) {
+            Simbolo sim = partidaActual.getJugadorActual().getSimbolo();
+            lblGanador.setText("Ganador: Jugador " + sim.toString());
+        } else {
+            lblGanador.setText("Empate");            
+        }
         modalFinal.setVisible(true);
         
     }

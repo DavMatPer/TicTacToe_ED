@@ -42,7 +42,7 @@ public class Navegacion {
             
             Stage stage = (Stage) ((Node) evento.getSource()).getScene().getWindow() ;
             
-            stage.setScene(new Scene(raiz));
+            stage.getScene().setRoot(raiz);
             stage.show();
         } catch ( IOException e) {
             System.err.println("Error al regresar al menú: " + e.getMessage());
@@ -64,7 +64,7 @@ public class Navegacion {
             Parent raiz = loader.load();
             
             Stage stage = (Stage) ((Node) evento.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(raiz));
+            stage.getScene().setRoot(raiz);
             stage.show();
             
             return loader.getController();

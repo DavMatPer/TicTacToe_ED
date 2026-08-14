@@ -78,8 +78,8 @@ public class CargaViewController  {
         
         // Estilización
         item.setMaxWidth(Double.MAX_VALUE);
-        String estiloNormal = "-fx-background-color: #e0e0e0; -fx-padding: 15; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-size: 16px;";
-        String estiloHover = "-fx-background-color: #b3d9ff; -fx-padding: 15; -fx-background-radius: 5; -fx-cursor: hand; -fx-font-size: 16px;";
+        String estiloNormal = "-fx-background-color: white; -fx-text-fill: #011627; -fx-padding: 20; -fx-background-radius: 15; -fx-cursor: hand; -fx-font-size: 18px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);";
+        String estiloHover = "-fx-background-color: #2EC4B6; -fx-text-fill: white; -fx-padding: 20; -fx-background-radius: 15; -fx-cursor: hand; -fx-font-size: 18px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(46,196,182,0.4), 15, 0, 0, 5);";
         
         item.setStyle(estiloNormal);
         

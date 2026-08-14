@@ -1,64 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.estructuras.tictactoe.view.controllers.SeleccionController">
-    <children>
-        <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<!-- Cambiamos AnchorPane por VBox para un centrado perfecto y conectamos el CSS -->
+<VBox alignment="CENTER" spacing="40.0" prefHeight="500.0" prefWidth="700.0" 
+      stylesheets="@estilos.css" styleClass="fondo-principal" 
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.estructuras.tictactoe.view.controllers.SeleccionController">
+    
+    <Label text="Configuración de Partida" styleClass="titulo" />
+    
+    <HBox alignment="CENTER" spacing="50.0">
+        
+        <!-- PANEL JUGADOR 1 -->
+        <VBox alignment="CENTER" spacing="20.0" prefWidth="240" styleClass="tarjeta">
+            <Label text="Jugador 1" style="-fx-font-size: 24px; -fx-text-fill: #2EC4B6; -fx-font-weight: bold;" />
             
-            <Label text="Configuración de Partida" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="Símbolo:" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+                <HBox alignment="CENTER" spacing="15.0">
+                    <RadioButton fx:id="rbX1" text="X" selected="true" styleClass="radio-candy" />
+                    <RadioButton fx:id="rbO1" text="O" styleClass="radio-candy"/>
+                </HBox>
+            </VBox>
             
-            <HBox alignment="CENTER" spacing="50.0">
-                
-                <!-- PANEL JUGADOR 1 -->
-                <VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: #cccccc; -fx-padding: 20; -fx-background-radius: 10;">
-                    <Label text="Jugador 1" style="-fx-font-size: 18px; -fx-text-fill: #0078D7; -fx-font-weight: bold;" />
-                    
-                    <Label text="Símbolo:" />
-                    <HBox alignment="CENTER" spacing="15.0">
-                        <RadioButton fx:id="rbX1" text="X" selected="true" />
-                        <RadioButton fx:id="rbO1" text="O" />
-                    </HBox>
-                    
-                    <Label text="Tipo de Jugador:" />
-                    <HBox alignment="CENTER" spacing="15.0">
-                        <RadioButton fx:id="rbHumano1" text="Humano" selected="true" />
-                        <RadioButton fx:id="rbPC1" text="PC" />
-                    </HBox>
-                </VBox>
-                
-                <!-- PANEL JUGADOR 2 -->
-                <VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: #cccccc; -fx-padding: 20; -fx-background-radius: 10;">
-                    <Label text="Jugador 2" style="-fx-font-size: 18px; -fx-text-fill: #0078D7; -fx-font-weight: bold;" />
-                    
-                    <Label text="Símbolo:" />
-                    <HBox alignment="CENTER" spacing="15.0">
-                        <RadioButton fx:id="rbX2" text="X" />
-                        <RadioButton fx:id="rbO2" text="O" selected="true" />
-                    </HBox>
-                    
-                    <Label text="Tipo de Jugador:" />
-                    <HBox alignment="CENTER" spacing="15.0">
-                        <RadioButton fx:id="rbHumano2" text="Humano" />
-                        <RadioButton fx:id="rbPC2" text="PC" selected="true" />
-                    </HBox>
-                </VBox>
-                
-            </HBox>
-            
-            <!-- BOTONES INFERIORES -->
-            <HBox alignment="CENTER" spacing="40.0">
-                <Button text="Volver al Menú" onAction="#volverMenu" style="-fx-background-radius: 15; -fx-padding: 8 20 8 20; -fx-font-size: 14px;" />
-                <Button text="Iniciar Partida" onAction="#iniciarPartida" style="-fx-background-radius: 15; -fx-padding: 8 20 8 20; -fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" />
-            </HBox>
-            
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="Tipo:" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+                <HBox alignment="CENTER" spacing="15.0">
+                    <RadioButton fx:id="rbHumano1" text="Humano" selected="true" styleClass="radio-candy" />
+                    <RadioButton fx:id="rbPC1" text="PC" styleClass="radio-candy" />
+                </HBox>
+            </VBox>
         </VBox>
-    </children>
-</AnchorPane>
+        
+        <!-- PANEL JUGADOR 2 -->
+        <VBox alignment="CENTER" spacing="20.0" prefWidth="240" styleClass="tarjeta">
+            <Label text="Jugador 2" style="-fx-font-size: 24px; -fx-text-fill: #FF9F1C; -fx-font-weight: bold;" />
+            
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="Símbolo:" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+                <HBox alignment="CENTER" spacing="15.0">
+                    <RadioButton fx:id="rbX2" text="X" styleClass="radio-candy" />
+                    <RadioButton fx:id="rbO2" text="O" selected="true" styleClass="radio-candy" />
+                </HBox>
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="10">
+                <Label text="Tipo:" style="-fx-text-fill: #555555; -fx-font-weight: bold;"/>
+                <HBox alignment="CENTER" spacing="15.0">
+                    <RadioButton fx:id="rbHumano2" text="Humano" styleClass="radio-candy"/>
+                    <RadioButton fx:id="rbPC2" text="PC" selected="true" styleClass="radio-candy"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </HBox>
+    
+    <!-- BOTONES INFERIORES -->
+    <HBox alignment="CENTER" spacing="40.0">
+        <Button text="Volver al Menú" onAction="#volverMenu" styleClass="btn-candy, btn-rosa" />
+        <Button text="Iniciar Partida" onAction="#iniciarPartida" styleClass="btn-candy, btn-turquesa" />
+    </HBox>
+    
+</VBox>
