@@ -5,6 +5,7 @@
 package com.estructuras.tictactoe.view.controllers;
 
 import com.estructuras.tictactoe.controllers.PartidaController;
+import com.estructuras.tictactoe.model.computer.JugadorComputador;
 import com.estructuras.tictactoe.model.game.Partida;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.persistencia.PartidaSerializer;
@@ -37,6 +38,7 @@ import javafx.util.Duration;
 public class PartidaViewController implements Initializable {
 
     // --- CAPA 1: JUEGO ---
+    @FXML private Label lblPC;
     @FXML private Label lblTurno;
     @FXML private GridPane gridTablero;
     
@@ -152,12 +154,15 @@ public class PartidaViewController implements Initializable {
                         btn.getStyleClass().add("simbolo-o"); // Pinta la O de naranja
                         break;
                     default:
-                        btn.setText("");
+                        btn.setText(""); 
                         break;
                 }
             }
         }
         lblTurno.setText("Turno de: " + partidaActual.getJugadorActual().getSimbolo());
+        boolean esPC = partidaActual.getJugadorActual() instanceof JugadorComputador;
+        
+        lblPC.setVisible(esPC);
     }
 
     @FXML

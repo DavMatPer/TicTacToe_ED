@@ -42,34 +42,46 @@
 .btn-gris     { -fx-background-color: #E0E0E0; -fx-text-fill: #555555; }
 
 /* ========================================
-   RADIO BUTTONS CANDY (Personalizados)
+   RADIO BUTTONS CANDY (Estilo Píldora)
 ======================================== */
+/* Estilo base (inactivo) */
 .radio-candy {
-    -fx-font-size: 16px;
-    -fx-text-fill: #555555;
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-font-size: 10px;
+    -fx-text-fill: #828282;
     -fx-font-weight: bold;
     -fx-cursor: hand;
+    -fx-alignment: center;
 }
 
-/* El círculo exterior */
+/* Efecto al pasar el mouse (hover) */
+.radio-candy:hover {
+    -fx-background-color: #E0E0E0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+/* Magia: Ocultamos el círculo nativo de JavaFX */
 .radio-candy .radio {
-    -fx-background-color: white;
-    -fx-border-color: #2EC4B6;
-    -fx-border-radius: 15;
-    -fx-border-width: 2;
-    -fx-padding: 5;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
 }
 
-/* El punto interior cuando se selecciona */
-.radio-candy:selected .radio .dot {
+/* Color para el Jugador 1 (Turquesa) al seleccionarse */
+.radio-p1:selected {
+    -fx-background-color: #2EC4B6;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(46,196,182,0.4), 10, 0, 0, 3);
+}
+
+/* Color para el Jugador 2 (Naranja) al seleccionarse */
+.radio-p2:selected {
     -fx-background-color: #FF9F1C;
-    -fx-background-radius: 15;
-    -fx-padding: 6;
-}
-
-.btn-pequeno {
-    -fx-padding: 8 18; /* Menos relleno horizontal y vertical */
-    -fx-font-size: 14px; /* Letra ligeramente más pequeña */
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(255,159,28,0.4), 10, 0, 0, 3);
 }
 
 /* ========================================
@@ -85,6 +97,12 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);
     -fx-padding: 0; 
     -fx-alignment: center;
+}
+
+.label-jugador {
+    -fx-font-size: 18px;;
+    -fx-text-fill: #011627;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
 }
 
 .casilla-juego:hover {
