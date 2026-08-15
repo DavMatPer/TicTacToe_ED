@@ -1,9 +1,5 @@
 package com.estructuras.tictactoe.model.game;
 
-/**
- *
- * @author david
- */
 public abstract class Jugador {
     private Simbolo simbolo;
 

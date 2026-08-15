@@ -1,9 +1,5 @@
 package com.estructuras.tictactoe.model.game;
 
-/**
- *
- * @author david
- */
 public class Partida {
     private Tablero tablero;
     private Jugador[] jugadores;
@@ -11,7 +7,7 @@ public class Partida {
     private int movimientosRealizados;
 
     public Partida(Tablero tablero, Jugador[] jugadores, int indiceJugadorActual) {
-        
+
         if (jugadores == null) {
             throw new IllegalArgumentException("Jugadores inválidos");
         }
@@ -40,7 +36,7 @@ public class Partida {
     }
 
     public void iniciarPartida() {
-        
+
     }
 
     /**
@@ -67,11 +63,11 @@ public class Partida {
 
     /**
      * Verifica si hay un ganador en la partida.
-     * @return 
+     * @return
      */
     public boolean hayGanador() {
         if (movimientosRealizados < 5) {
-            return false; 
+            return false;
         }
         if (tablero.esEmpate()) return false;
         Simbolo simboloActual = jugadores[indiceJugadorActual].getSimbolo();

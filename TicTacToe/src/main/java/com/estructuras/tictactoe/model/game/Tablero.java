@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.estructuras.tictactoe.model.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author david
- */
 public class Tablero {
     private Simbolo[][] tablero;
 
@@ -58,10 +50,10 @@ public class Tablero {
 
         if ( tablero[row][col] != Simbolo.V) return false;
 
-        tablero[row][col] = simbolo; 
+        tablero[row][col] = simbolo;
         return true;
     }
-    
+
     /**
      * Verifica si el tablero está vacío.
      * @return
@@ -91,7 +83,7 @@ public class Tablero {
         }
         return true;
     }
-    
+
     /**
      * Verifica si un jugador ha ganado el juego.
      * @param simbolo
@@ -104,8 +96,7 @@ public class Tablero {
         }
         return false;
     }
-
-        
+    
 
     /**
      * Verifica si el juego terminó en empate.

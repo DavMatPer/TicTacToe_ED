@@ -1,0 +1,7 @@
+[33m3f04338[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Se agrego la clases vontrolador de partida y una interfaz PartidaView para poder trabajar con la vista sin necesidad de escoger un programa para visualizar el juego.
+[33m0f48844[m Merge pull request #1 from DavMatPer/computador
+[33me00a192[m[33m ([m[1;31morigin/computador[m[33m)[m Clases del paquete de computador
+[33mdbaa813[m[33m ([m[1;31morigin/Controladores[m[33m)[m ´Creadas clases del módelo del juego principal, sin especificar el tipo de jugador. Solo contiene la lógica de cada clase.
+[33mc951e3f[m Proyecto Maven Sin Plataforma Elegida
+[33md585fc7[m Update README
+[33m5534a4e[m Initial commit
