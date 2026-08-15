@@ -3,7 +3,7 @@ package com.estructuras.tictactoe.model.computer;
 import com.estructuras.tictactoe.model.game.*;
 
 public class ArbolTablero {
-  
+
   private NodoTablero raiz;
 
     /**
@@ -112,7 +112,7 @@ public class ArbolTablero {
              */
             NodoTablero nuevoNodo =
                 new NodoTablero(nuevoTablero);
-
+            nuevoNodo.setMovimiento(movimiento);
             /*
              * Crear el subárbol cuya raíz es el nuevo nodo.
              */
@@ -153,7 +153,7 @@ public class ArbolTablero {
         return Simbolo.X;
     }
 
-    
+
     public NodoTablero getRaiz() {
         return raiz;
     }

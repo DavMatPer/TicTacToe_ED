@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.estructuras.tictactoe.view.PartidaViewController">
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.estructuras.tictactoe.view.controllers.PartidaViewController">
     
     <!-- CAPA 1: PANTALLA DE JUEGO PRINCIPAL -->
     <VBox alignment="CENTER" spacing="30.0" style="-fx-padding: 40; -fx-background-color: #f0f0f0;">

@@ -19,7 +19,7 @@ import javafx.scene.control.ToggleGroup;
 public class SeleccionController implements Initializable {
 
     @FXML private RadioButton rbX1, rbO1, rbHumano1, rbPC1;
-    
+
     @FXML private RadioButton rbX2, rbO2, rbHumano2, rbPC2;
 
     private ToggleGroup tgSimbolo1, tgTipo1, tgSimbolo2, tgTipo2;
@@ -52,23 +52,23 @@ public class SeleccionController implements Initializable {
             if (newValue == rbX2) rbO1.setSelected(true);
             else if (newValue == rbO2) rbX1.setSelected(true);
         });
-    }    
-    
+    }
+
     @FXML
     private void iniciarPartida(ActionEvent event) {
         System.out.println("Configurando entidades y preparando el tablero...");
-        
+
 
         Simbolo sim1 = rbX1.isSelected() ? Simbolo.X : Simbolo.O;
         Simbolo sim2 = rbX2.isSelected() ? Simbolo.X : Simbolo.O;
-        
+
         Jugador jugador1 = rbHumano1.isSelected() ? new JugadorHumano(sim1) : new JugadorComputador(sim1);
         Jugador jugador2 = rbHumano2.isSelected() ? new JugadorHumano(sim2) : new JugadorComputador(sim2);
-        
+
         Jugador[] arregloJugadores = new Jugador[]{jugador1, jugador2};
 
-        Partida nuevaPartida = new Partida(new Tablero(), arregloJugadores);
-        
+        int indiceInicial = (sim1 == Simbolo.X) ? 0 : 1;
+        Partida nuevaPartida = new Partida(new Tablero(), arregloJugadores, indiceInicial);
         cambiarVistaJuego(event, nuevaPartida);
     }
 
@@ -77,12 +77,12 @@ public class SeleccionController implements Initializable {
         System.out.println("Volver al Menu");
         Navegacion.avanzar(event,this, "MenuView.fxml");
     }
-    
+
     // --- Métodos Auxiliares de Navegación ---
-    
+
     private void cambiarVistaJuego(ActionEvent event, Partida partida) {
         PartidaViewController controladorPartida = Navegacion.avanzarConControlador(event, this, "PartidaView.fxml");
-        
+
         if ( controladorPartida != null) {
             controladorPartida.setPartida(partida);
         }

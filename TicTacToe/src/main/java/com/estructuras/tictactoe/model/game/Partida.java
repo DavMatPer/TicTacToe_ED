@@ -62,12 +62,12 @@ public class Partida implements Serializable{
 
     /**
      * Realiza un movimiento en el tablero de juego.
+     * @param fila la fila donde se desea realizar el movimiento.
      * @param col la columna donde se desea realizar el movimiento.
-     * @param row la fila donde se desea realizar el movimiento.
      * @return true si el movimiento se realizó correctamente, false en caso contrario.
      */
-    public boolean realizarMovimiento(int col , int row) {
-        Movimiento movimiento = new Movimiento(row, col, jugadores[indiceJugadorActual].getSimbolo());
+    public boolean realizarMovimiento(int fila , int col) {
+        Movimiento movimiento = new Movimiento(fila, col, jugadores[indiceJugadorActual].getSimbolo());
         if (tablero.realizarMovimiento(movimiento)) {
             movimientosRealizados++;
             return true;
