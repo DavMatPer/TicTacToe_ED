@@ -1,9 +1,5 @@
 package com.estructuras.tictactoe.model.game;
 
-/**
- * 
- * @author david
- */
 public class Movimiento {
     private int row;
     private int col;

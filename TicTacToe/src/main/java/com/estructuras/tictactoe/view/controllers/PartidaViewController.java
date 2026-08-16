@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package com.estructuras.tictactoe.view.controllers;
 
 import com.estructuras.tictactoe.controllers.PartidaController;
@@ -30,78 +26,79 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-/**
- * FXML Controller class
- *
- * @author david
- */
+
 public class PartidaViewController implements Initializable {
 
     // --- CAPA 1: JUEGO ---
     @FXML private Label lblPC;
     @FXML private Label lblTurno;
     @FXML private GridPane gridTablero;
-    
+
     // --- CAPA 2: MODAL GUARDADO ---
     @FXML private StackPane modalGuardar;
     @FXML private TextField txtNombreGuardado;
 
     @FXML private Label lblGanador;
     @FXML private StackPane modalFinal;
-    
-    private Partida partidaActual;
+
     private PartidaController controladorPartida;
     private Button[][] matrizBotones;
     private PauseTransition transicionPista;
-    
+
     private final String RUTA_ARCHIVO = RutaGuardado.getRuta();
     private final String ESTILO_BOTON_NORMAL = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);";
     private final String ESTILO_BOTON_PISTA = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: #FFF9C4; -fx-border-color: #FF9F1C; -fx-border-width: 4; -fx-border-radius: 12; -fx-background-radius: 15; -fx-cursor: hand;";
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Inicializamos la matriz visual de botones[cite: 14]
         matrizBotones = new Button[3][3];
         dibujarCuadriculaVacia();
-    }    
+    }
 
     /**
      * Este método será llamado desde SeleccionController o CargaViewController
      * para inyectar la lógica al momento de cambiar a esta pantalla.
      */
     public void setPartida(Partida partida) {
-        //this.controladorPartida = new PartidaController( partida);
-        this.partidaActual = partida;
-        actualizarVistaTablero();
+      this.controladorPartida = new PartidaController(partida);
+      actualizarVistaTablero();
+
+      if (controladorPartida.getJugadorActual() instanceof JugadorComputador) {
+          new Thread(() -> {
+              controladorPartida.turnoComputadora();
+              javafx.application.Platform.runLater(() -> actualizarVistaTablero());
+          }).start();
+      }
     }
 
     // ==========================================
     // LÓGICA GRÁFICA DEL TABLERO
     // ==========================================
-    
+
     private void dibujarCuadriculaVacia() {
         gridTablero.getChildren().clear();
-        
+
         for (int fila = 0; fila < 3; fila++) {
             for (int col = 0; col < 3; col++) {
                 Button btnCasilla = new Button("");
-                
-            ; 
-                
+
+            ;
+
                 btnCasilla.setMinSize(80, 80);
                 btnCasilla.setMaxSize(80, 80);
                 btnCasilla.setPrefSize(80, 80);
-                
+
                 // Aplicamos la clase CSS en lugar del texto en duro
-                btnCasilla.getStyleClass().add("casilla-juego"); 
-                
+                btnCasilla.getStyleClass().add("casilla-juego");
+
                 final int f = fila;
                 final int c = col;
-                
+
                 btnCasilla.setOnAction(e -> alClickearCasilla(f, c));
-                
+
                 matrizBotones[fila][col] = btnCasilla;
-                gridTablero.add(btnCasilla, col, fila); 
+                gridTablero.add(btnCasilla, col, fila);
             }
         }
     }
@@ -109,39 +106,33 @@ public class PartidaViewController implements Initializable {
     private void alClickearCasilla(int fila, int col) {
         if (transicionPista != null && transicionPista.getStatus() == javafx.animation.Animation.Status.RUNNING) {
             transicionPista.stop();
-            actualizarVistaTablero(); 
-        } 
-        
+            actualizarVistaTablero();
+        }
+
         // 1. Invocar a la lógica de tu modelo (Asegúrate de tener un método similar en Partida)
         // boolean movimientoValido = partidaActual.registrarMovimiento(fila, col);
-        
+
         System.out.println("Jugador seleccionó casilla: " + fila + "," + col);
-        //TODO 
-        // QUe no sea la parttida quien ghaga el movimiento más bien el controlador de ella.
-        if (partidaActual.realizarMovimiento(fila, col)) {
-            Button casilla = matrizBotones[fila][col];
-            casilla.setText(
-                    partidaActual.getJugadorActual().getSimbolo().toString()
-            );
-            if (partidaActual.isGameOver()) {
-                actualizarVistaTablero();
-                mostrarModalFinal();
-                return;
-            }
-            partidaActual.cambiarTurno();
+        //TODO
+        // Que no sea la parttida quien ghaga el movimiento más bien el controlador de ella.
+        if (controladorPartida.realizarMovimiento(fila, col)) {
             actualizarVistaTablero();
-        } 
+            if(controladorPartida.isGameOver()) {
+              mostrarModalFinal();
+              return;
+            }
+        }
     }
 
     private void actualizarVistaTablero() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Button btn = matrizBotones[j][i];
-                Simbolo sim = partidaActual.getTablero().getTablero()[i][j];
-                
+                Button btn = matrizBotones[i][j];
+                Simbolo sim = controladorPartida.getTablero().getTablero()[i][j];
+
                 // Limpiamos estilos previos de colores o pistas
                 btn.getStyleClass().removeAll("simbolo-x", "simbolo-o", "casilla-pista");
-                
+
                 if (null == sim) {
                     btn.setText("");
                 } else switch (sim) {
@@ -159,30 +150,33 @@ public class PartidaViewController implements Initializable {
                 }
             }
         }
-        lblTurno.setText("Turno de: " + partidaActual.getJugadorActual().getSimbolo());
-        boolean esPC = partidaActual.getJugadorActual() instanceof JugadorComputador;
+
+        boolean esPC = controladorPartida.getJugadorActual() instanceof JugadorComputador;
         
         lblPC.setVisible(esPC);
+
+        lblTurno.setText("Turno de: " + controladorPartida.getJugadorActual().getSimbolo());
+
     }
 
     @FXML
     private void solicitarPista(ActionEvent event) {
         System.out.println("Llamando al árbol N-ario / Minimax...");
-        
+
         if (transicionPista != null && transicionPista.getStatus() == javafx.animation.Animation.Status.RUNNING) {
             return;
         }
-        
+
         // Simulación: Supongamos que Minimax recomienda la fila 1, columna 1
         int filaSugerida = 1;
         int colSugerida = 1;
-        
+
         Button btnSugerido = matrizBotones[filaSugerida][colSugerida];
         if (false) return; //TODO que la pista no sea en una casilla ocupada.
-        
+
         // Iluminamos la casilla de color amarillo dorado
         btnSugerido.getStyleClass().add("casilla-pista");
-        
+
         transicionPista = new PauseTransition(Duration.seconds(1.5));
         transicionPista.setOnFinished(e -> {
             actualizarVistaTablero();
@@ -205,7 +199,7 @@ public class PartidaViewController implements Initializable {
         txtNombreGuardado.clear();
         txtNombreGuardado.setPromptText("Asigna un nombre a tu partida...");
     }
-    
+
     private void ocultarModalGuardar() {
         modalGuardar.setVisible(false);
         txtNombreGuardado.clear();
@@ -215,7 +209,7 @@ public class PartidaViewController implements Initializable {
     @FXML
     private void guardarYSalir(ActionEvent event) {
         String nombre = txtNombreGuardado.getText().trim();
-        
+
         if (nombre.isEmpty()) {
             txtNombreGuardado.setStyle("-fx-border-color: red;");
             txtNombreGuardado.setPromptText("¡El nombre no puede estar vacío!");
@@ -223,17 +217,17 @@ public class PartidaViewController implements Initializable {
         }
 
         try {
-            RegistroPartida nuevoRegistro = new RegistroPartida(nombre, partidaActual);
+            RegistroPartida nuevoRegistro = new RegistroPartida(nombre, controladorPartida.getPartida());
             PartidaSerializer.guardarPartida(nuevoRegistro, RUTA_ARCHIVO);
-            
+
             Stage stage = (Stage) txtNombreGuardado.getScene().getWindow();
             mostrarToast("Guardado: " + nombre, stage);
-            
+
             ejecutarRetornoAlMenu(event);
-            
+
         } catch (Exception e) {
             System.err.println("Error fatal al guardar: " + e.getMessage());
-            
+
             alertaError(e);
         }
     }
@@ -246,7 +240,7 @@ public class PartidaViewController implements Initializable {
     private void ejecutarRetornoAlMenu(ActionEvent event) {
         Navegacion.avanzar(event, this, "MenuView.fxml");
     }
-    
+
     private void alertaExito(String nombre) {
         Alert alertaExito = new Alert(Alert.AlertType.INFORMATION);
         alertaExito.setTitle("Partida Guardada");
@@ -254,7 +248,7 @@ public class PartidaViewController implements Initializable {
         alertaExito.setContentText("Tu partida '" + nombre + "' se guardó correctamente.");
         alertaExito.showAndWait(); // Pausa la ejecución hasta que el usuario dé OK
     }
-    
+
     private void alertaError(Exception e) {
         Alert alertaError = new Alert(Alert.AlertType.ERROR);
         alertaError.setTitle("Error de Guardado");
@@ -262,50 +256,50 @@ public class PartidaViewController implements Initializable {
         alertaError.setContentText("Detalle: " + e.getMessage());
         alertaError.showAndWait();
     }
-    
+
 
     private void mostrarToast(String mensaje, Stage stage) {
         Popup toast = new Popup();
         Label lblToast = new Label(mensaje);
-        
+
         // Estilo oscuro, bordes redondeados y texto blanco
         lblToast.setStyle("-fx-background-color: rgba(50, 50, 50, 0.9); -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 20; -fx-font-size: 14px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);");
         toast.getContent().add(lblToast);
-        
+
         // Mostramos el popup para que JavaFX calcule su ancho real
         toast.show(stage);
-        
+
         // Lo posicionamos centrado y en la parte inferior de la ventana
         toast.setY(stage.getY() + stage.getHeight() - 100);
         toast.setX(stage.getX() + (stage.getWidth() / 2) - (lblToast.getWidth() / 2));
-        
+
         // Programamos su evaporación después de 2 segundos
         PauseTransition pausa = new PauseTransition(Duration.seconds(2));
         pausa.setOnFinished(e -> toast.hide());
         pausa.play();
     }
-    
+
     /*
     ========================================
                   CONTROL MODAL FINAL
     ========================================
     */
-    
+
     @FXML
     public void ocultarModalFinal(ActionEvent event) {
         modalFinal.setVisible(false);
         ejecutarRetornoAlMenu(event);
     }
-    
+
     public void mostrarModalFinal() {
-        if ( partidaActual.hayGanador()) {
-            Simbolo sim = partidaActual.getJugadorActual().getSimbolo();
+        if ( controladorPartida.hayGanador()) {
+            Simbolo sim = controladorPartida.getJugadorActual().getSimbolo();
             lblGanador.setText("Ganador: Jugador " + sim.toString());
         } else {
-            lblGanador.setText("Empate");            
+            lblGanador.setText("Empate");
         }
         modalFinal.setVisible(true);
-        
+
     }
-    
+
 }

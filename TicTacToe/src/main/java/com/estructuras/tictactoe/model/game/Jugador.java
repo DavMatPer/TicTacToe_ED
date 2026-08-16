@@ -2,10 +2,6 @@ package com.estructuras.tictactoe.model.game;
 
 import java.io.Serializable;
 
-/**
- *
- * @author david
- */
 public abstract class Jugador implements Serializable{
     private static final long serialVersionUID = 1L;
     private Simbolo simbolo;

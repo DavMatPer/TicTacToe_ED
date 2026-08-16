@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
 package com.estructuras.tictactoe.model.persistencia;
 
 import com.estructuras.tictactoe.model.game.Jugador;
@@ -19,18 +15,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author david
- */
 public class PartidaSerializerIT {
     private final String RUTA_ARCHIVO = "pruebaRegistroPartida.dat";
 
-    
+
     public PartidaSerializerIT() {
     }
-    
-    
+
+
     /**
      * Asegurarse de que un archivo residual no afecte la prueba
      */
@@ -41,7 +33,7 @@ public class PartidaSerializerIT {
             file.delete();
         }
     }
-    
+
     /**
      * Asegurarse de eliminar el archivo luego de la prueba.
      */
@@ -52,7 +44,7 @@ public class PartidaSerializerIT {
             file.delete();
         }
     }
-    
+
 
     /**
      * T-PS-001
@@ -63,10 +55,10 @@ public class PartidaSerializerIT {
         System.out.println("guardarPartida");
 
         Jugador[] jugadores = new Jugador[]{
-            new JugadorHumano(Simbolo.X), 
+            new JugadorHumano(Simbolo.X),
             new JugadorHumano(Simbolo.O)
         };
-        
+
         Partida partida = new Partida(new Tablero(), jugadores, 0);
         RegistroPartida registro = new RegistroPartida("partida_test", partida);
         PartidaSerializer.guardarPartida(registro, RUTA_ARCHIVO);
@@ -86,17 +78,17 @@ public class PartidaSerializerIT {
         System.out.println("guardarPartida");
 
         Jugador[] jugadores = new Jugador[]{
-            new JugadorHumano(Simbolo.X), 
+            new JugadorHumano(Simbolo.X),
             new JugadorHumano(Simbolo.O)
         };
-        
+
         Partida partida = new Partida(new Tablero(), jugadores, 0);
         RegistroPartida registro = new RegistroPartida("partida_test", partida);
         PartidaSerializer.guardarPartida(registro, RUTA_ARCHIVO);
         PartidaSerializer.guardarPartida(registro, RUTA_ARCHIVO);
 
         File file = new File(RUTA_ARCHIVO);
-        
+
         assertTrue(file.exists(), "El aechivo de guardadi debería existir tras invocar el método,");
         assertTrue(file.length() > 1, "El archivo deberái tener más de una línea.");
     }
@@ -109,19 +101,19 @@ public class PartidaSerializerIT {
     public void testCargarPartida() throws Exception {
         System.out.println("TEST: cargarPartida");
         String nombrePartida = "partida_a_cargar";
-        
+
         // 1. Preparar el terreno (Guardar una partida primero)
         Jugador[] jugadores = new Jugador[]{new JugadorHumano(Simbolo.X), new JugadorHumano(Simbolo.O)};
         Partida partidaOriginal = new Partida(new Tablero(), jugadores, 0);
         RegistroPartida registro = new RegistroPartida(nombrePartida, partidaOriginal);
         PartidaSerializer.guardarPartida(registro, RUTA_ARCHIVO);
-        
+
         // 2. Ejecutar el método a probar
         Partida result = PartidaSerializer.cargarPartida(nombrePartida, RUTA_ARCHIVO);
-        
+
         // 3. Validar
         assertNotNull(result, "La partida cargada no debe ser nula.");
-        
+
         // 4. Validar que se consumió (si ejecutamos cargar de nuevo, debería fallar)
         assertThrows(ClassNotFoundException.class, () -> {
             PartidaSerializer.cargarPartida(nombrePartida, RUTA_ARCHIVO);
@@ -135,7 +127,7 @@ public class PartidaSerializerIT {
     @Test
     public void testCargarPartidaInexistente() {
         System.out.println("TEST: cargarPartidaInexistente");
-        
+
         // Intentar cargar desde un archivo que ni siquiera existe
         assertThrows(Exception.class, () -> {
             PartidaSerializer.cargarPartida("Partida_Fantasma", RUTA_ARCHIVO);
@@ -149,19 +141,19 @@ public class PartidaSerializerIT {
     @Test
     public void testObtenerPartidasGuardadas() throws Exception {
         System.out.println("TEST: obtenerPartidasGuardadas");
-        
+
         // 1. Guardar múltiples partidas
         Jugador[] jugadores = new Jugador[]{new JugadorHumano(Simbolo.X), new JugadorHumano(Simbolo.O)};
-        
+
         RegistroPartida reg1 = new RegistroPartida("Juego1", new Partida(new Tablero(), jugadores, 0));
         RegistroPartida reg2 = new RegistroPartida("Juego2", new Partida(new Tablero(), jugadores, 0));
-        
+
         PartidaSerializer.guardarPartida(reg1, RUTA_ARCHIVO);
         PartidaSerializer.guardarPartida(reg2, RUTA_ARCHIVO);
-        
+
         // 2. Ejecutar el método
         List<String> result = PartidaSerializer.obtenerPartidasGuardadas(RUTA_ARCHIVO);
-        
+
         // 3. Validar
         assertNotNull(result, "La lista devuelta no debe ser nula.");
         assertEquals(2, result.size(), "Deberían haberse encontrado exactamente 2 partidas.");
@@ -171,18 +163,18 @@ public class PartidaSerializerIT {
 
     /**
      * T-SP-006
-     * 
+     *
      */
     @Test
     public void testObtenerPartidasGuardadasSinPartidas() throws Exception {
         System.out.println("Test: obtenerPartidasGuardadasSinPartidas");
 
         File file = new File(RUTA_ARCHIVO);
-        
+
         List<String> result = PartidaSerializer.obtenerPartidasGuardadas(RUTA_ARCHIVO);
 
         assertNotNull(result, "La lista devuelta no debe ser nula.");
         assertTrue(result.isEmpty(), "La lista debería estar vacía.");
     }
-    
+
 }

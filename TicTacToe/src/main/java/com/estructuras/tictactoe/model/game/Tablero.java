@@ -8,10 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author david
- */
 public class Tablero implements Serializable{
     private static final long serialVersionUID = 1L;
     private Simbolo[][] tablero;
@@ -60,10 +56,10 @@ public class Tablero implements Serializable{
 
         if ( tablero[row][col] != Simbolo.V) return false;
 
-        tablero[row][col] = simbolo; 
+        tablero[row][col] = simbolo;
         return true;
     }
-    
+
     /**
      * Verifica si el tablero está vacío.
      * @return
@@ -93,7 +89,7 @@ public class Tablero implements Serializable{
         }
         return true;
     }
-    
+
     /**
      * Verifica si un jugador ha ganado el juego.
      * @param simbolo
@@ -107,7 +103,7 @@ public class Tablero implements Serializable{
         return false;
     }
 
-        
+
 
     /**
      * Verifica si el juego terminó en empate.

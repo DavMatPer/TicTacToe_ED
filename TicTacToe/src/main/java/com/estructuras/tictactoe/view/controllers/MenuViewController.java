@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package com.estructuras.tictactoe.view.controllers;
 
 
@@ -17,17 +13,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author david
- */
 public class MenuViewController   {
-    
+
     // El nombre de la variable DEBE coincidir exactamente con el fx:id del XML
     @FXML
     private Button btnNuevaPartida;
-    
+
     @FXML
     private Button btnCargarPartida;
 
@@ -43,5 +34,5 @@ public class MenuViewController   {
         System.out.println("Clic detectado: Abriendo menú de guardados...");
         Navegacion.avanzar(event, this, "CargaView.fxml");
     }
-    
+
 }
