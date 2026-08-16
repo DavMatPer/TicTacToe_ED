@@ -151,12 +151,13 @@ public class PartidaViewController implements Initializable {
             }
         }
 
+        lblTurno.setText("Turno de: " + controladorPartida.getJugadorActual().getSimbolo());
         boolean esPC = controladorPartida.getJugadorActual() instanceof JugadorComputador;
         
         lblPC.setVisible(esPC);
 
-        lblTurno.setText("Turno de: " + controladorPartida.getJugadorActual().getSimbolo());
 
+        lblTurno.setText("Turno de: " + controladorPartida.getJugadorActual().getSimbolo());
     }
 
     @FXML
