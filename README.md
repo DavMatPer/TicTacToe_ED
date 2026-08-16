@@ -35,8 +35,6 @@ Donde $P$ representa el número de líneas (filas, columnas y diagonales) aún d
 El sistema está diseñado modularmente para soportar las siguientes capacidades avanzadas:
 
 - [ ] ** Recomendador de Jugadas:** Asistente integrado que sugiere al jugador humano la casilla óptima a marcar analizando el estado del árbol.
-- [ ] ** Depurador de Utilidad en Tiempo Real:** Panel gráfico que muestra las jugadas candidatas evaluadas por la IA junto con sus valores de utilidad calculados ($u_{\min}$ y $u_{\max}$).
-- [ ] ** Inspector Visual del Árbol de Decisiones:** Renderizado gráfico interactivo de la estructura jerárquica del árbol $N$-ario generado durante el turno de la computadora.
 - [ ] ** Persistencia de Partidas:** Opciones para guardar el estado actual de una partida en disco y reanudarla posteriormente.
 
 ---
@@ -192,8 +190,8 @@ PartidaController o-- PartidaView : actualiza
 ##  Tecnologías Utilizadas
 
 * **Lenguaje:** Java 11+
-* **Interfaz Gráfica:** JavaFX / Android Studio
-* **Entorno de Desarrollo:** NetBeans / IntelliJ IDEA / Android Studio
+* **Interfaz Gráfica:** JavaFX
+* **Entorno de Desarrollo:** NetBeans / IntelliJ IDEA / VSCode
 * **Estructuras de Datos:** 
   * Árbol $N$-ario (Implementación nativa/propia)
   * Colecciones lineales (`List`, `ArrayList` del *Java Collection Framework*)
