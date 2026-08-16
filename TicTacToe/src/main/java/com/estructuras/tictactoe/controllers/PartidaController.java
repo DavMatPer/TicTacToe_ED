@@ -5,69 +5,108 @@ import com.estructuras.tictactoe.model.game.Jugador;
 import com.estructuras.tictactoe.model.game.Movimiento;
 import com.estructuras.tictactoe.model.game.Partida;
 import com.estructuras.tictactoe.model.game.Tablero;
+import com.estructuras.tictactoe.view.controllers.PartidaViewController;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class PartidaController {
     private Partida partida;
+    private PartidaViewController vistaPrincipal;
+    private static final double DELAY_SEGUNDOS_COMPUTADOR = 0.5;
 
-    public PartidaController(Jugador[] jugadores, int indiceInicial) {
-      this.partida = new Partida(new Tablero(), jugadores, indiceInicial);
+    public PartidaController(Partida partida) {
+      this.partida = partida;
+      this.vistaPrincipal = null;
     }
 
-    public PartidaController(Partida partidaRestaurada) {
-      this.partida = partidaRestaurada;
+    public PartidaController(Partida partida, PartidaViewController vista) {
+      this.partida = partida;
+      this.vistaPrincipal = vista;
     }
 
     /**
-     * Realiza el movimiento del jugador actual en la casilla indicada.
-     * Si el juego no ha terminado, cambia el turno y ejecuta automáticamente
-     * los movimientos de la computadora mientras sea su turno.
-     * @param fila fila de la casilla seleccionada
-     * @param col columna de la casilla seleccionada
-     * @return true si el movimiento se realizó correctamente, false en caso contrario
+     * Inicia el flujo de la partida. Se llama una vez que la vista está lista.
+     * Si el primer jugador es un computador, inicia su turno automáticamnte.
      */
-    public boolean realizarMovimiento(int fila, int col) {
+    public void iniciarPartida() {
+        gestionarTurnoComputador();
+    }
 
-      if (!partida.realizarMovimiento(fila, col)) {
-        return false;
-      }
-      if (partida.isGameOver()) {
-        return true;
-      }
 
-      partida.cambiarTurno();
-
-      while (partida.getJugadorActual() instanceof JugadorComputador && !partida.isGameOver()) {
-        Movimiento movComputador = ((JugadorComputador) partida.getJugadorActual()).realizarMovimiento(partida.getTablero());
-        partida.realizarMovimiento(movComputador.getRow(), movComputador.getCol());
-        if (!partida.isGameOver()) {
-          partida.cambiarTurno();
+    /**
+     * Realiza el movimiento del jugador humano.
+     * @param fila fila seleccionada.
+     * @param col columna seleccionada.
+     * @return false si el movimiento es inválido, true en caso contrario.
+     */
+    public boolean realizarMovimientoHumano(int fila, int col) {
+        if (partida.isGameOver()) {
+            return false; 
         }
-      }
 
-      return true;
+        if (partida.getJugadorActual() instanceof JugadorComputador) {
+            return false; // No procesar clicks durante el turno del PC
+        }
+
+        if (!partida.realizarMovimiento(fila, col)) {
+            return false; 
+        }
+
+        if (partida.isGameOver()) {
+            return true;
+        }
+
+        partida.cambiarTurno();
+
+        gestionarTurnoComputador(); 
+        return true;
     }
 
     /**
-     * Ejecuta los turnos consecutivos de la computadora hasta que el jugador
-     * actual sea humano o la partida haya terminado. Se usa al inicio si la
-     * computadora abre el juego, y después de cada movimiento humano si el
-     * modo de juego requiere turnos adicionales de la IA.
+     * Si el jugador actual es un computador, ejecuta su turno tras un delay.
      */
-    public void turnoComputadora() {
-      while (partida.getJugadorActual() instanceof JugadorComputador && !partida.isGameOver()) {
-          Movimiento mov = ((JugadorComputador) partida.getJugadorActual()).realizarMovimiento(partida.getTablero());
-          partida.realizarMovimiento(mov.getRow(), mov.getCol());
-          if (!partida.isGameOver()) {
-              partida.cambiarTurno();
-          }
-      }
+    private void gestionarTurnoComputador() {
+        if (! (partida.getJugadorActual() instanceof JugadorComputador) || partida.isGameOver()) 
+          return;
+        
+        PauseTransition pause = new PauseTransition(Duration.seconds(DELAY_SEGUNDOS_COMPUTADOR));
+
+        pause.setOnFinished(event -> {
+            ejecutarMovimientoComputador();
+            
+            // Actualizar la vista después del movimiento del PC
+            if (vistaPrincipal != null) {
+                vistaPrincipal.actualizarVistaTablero();
+            }
+            
+            // Si el juego terminó, no cambiar turno ni gestionar siguiente turno
+            if (partida.isGameOver()) {
+                vistaPrincipal.mostrarModalFinal();
+                return;
+            }
+            
+            partida.cambiarTurno();
+            
+            // Gestionar el siguiente turno si es del PC
+            gestionarTurnoComputador();
+        });
+
+        pause.play();
     }
+
+    /**
+     * Lógica interna para que el computador realice un movimiento y notifique a la UI.
+     */
+    private void ejecutarMovimientoComputador() {
+        JugadorComputador jugadorPC = (JugadorComputador) partida.getJugadorActual();
+        Movimiento mov = jugadorPC.realizarMovimiento(partida.getTablero());
+        partida.realizarMovimiento(mov.getRow(), mov.getCol());
+    }
+
 
     public boolean isGameOver() {
       return partida.isGameOver();
     }
-
-
 
     public boolean hayGanador() {
       return partida.hayGanador();
@@ -79,7 +118,7 @@ public class PartidaController {
 
     public Jugador getGanador() {
       if(hayGanador()) {
-        return getJugadorActual();
+        partida.getJugadorActual();
       }
       return null;
     }
@@ -92,7 +131,4 @@ public class PartidaController {
       return partida;
     }
 
-    public void setPartida(Partida partida) {
-      this.partida = partida;
-    }
 }

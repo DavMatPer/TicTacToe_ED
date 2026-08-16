@@ -49,8 +49,6 @@ public class PartidaViewController implements Initializable {
     private MiniMax minimax;
 
     private final String RUTA_ARCHIVO = RutaGuardado.getRuta();
-    private final String ESTILO_BOTON_NORMAL = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);";
-    private final String ESTILO_BOTON_PISTA = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: #FFF9C4; -fx-border-color: #FF9F1C; -fx-border-width: 4; -fx-border-radius: 12; -fx-background-radius: 15; -fx-cursor: hand;";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,15 +62,8 @@ public class PartidaViewController implements Initializable {
      * para inyectar la lógica al momento de cambiar a esta pantalla.
      */
     public void setPartida(Partida partida) {
-      this.controladorPartida = new PartidaController(partida);
-      actualizarVistaTablero();
-
-      if (controladorPartida.getJugadorActual() instanceof JugadorComputador) {
-          new Thread(() -> {
-              controladorPartida.turnoComputadora();
-              javafx.application.Platform.runLater(() -> actualizarVistaTablero());
-          }).start();
-      }
+      controladorPartida = new PartidaController(partida, this);
+      this.controladorPartida.iniciarPartida();
     }
 
     // ==========================================
@@ -107,6 +98,11 @@ public class PartidaViewController implements Initializable {
     }
 
     private void alClickearCasilla(int fila, int col) {
+        // Bloquear clicks si es turno del computador
+        if (controladorPartida.getJugadorActual() instanceof JugadorComputador) {
+            return;
+        }
+
         if (transicionPista != null && transicionPista.getStatus() == javafx.animation.Animation.Status.RUNNING) {
             transicionPista.stop();
             actualizarVistaTablero();
@@ -114,18 +110,17 @@ public class PartidaViewController implements Initializable {
 
         System.out.println("Jugador seleccionó casilla: " + fila + "," + col);
         
-        if (! controladorPartida.realizarMovimiento(fila, col)) return;
+        controladorPartida.realizarMovimientoHumano(fila, col);
         actualizarVistaTablero();
 
-        if(controladorPartida.isGameOver()) {
+        if (controladorPartida.isGameOver()) {
             mostrarModalFinal();
-            return;
         }
-
-        
     }
 
-    private void actualizarVistaTablero() {
+
+
+    public void actualizarVistaTablero() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 Button btn = matrizBotones[i][j];
@@ -134,7 +129,7 @@ public class PartidaViewController implements Initializable {
                 // Limpiamos estilos previos de colores o pistas
                 btn.getStyleClass().removeAll("simbolo-x", "simbolo-o", "casilla-pista");
 
-                if (null == sim) {
+                if (sim == Simbolo.V || sim == null) {
                     btn.setText("");
                 } else switch (sim) {
                     case X:
@@ -156,9 +151,18 @@ public class PartidaViewController implements Initializable {
         boolean esPC = controladorPartida.getJugadorActual() instanceof JugadorComputador;
         
         lblPC.setVisible(esPC);
+    }
 
-
-        lblTurno.setText("Turno de: " + controladorPartida.getJugadorActual().getSimbolo());
+    /**
+     * Habilita o deshabilita los botones del tablero según si es turno del computador.
+     */
+    private void actualizarEstadoBotones() {
+        boolean esTurnoPC = controladorPartida.getJugadorActual() instanceof JugadorComputador;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                matrizBotones[i][j].setDisable(esTurnoPC);
+            }
+        }
     }
 
     @FXML
@@ -169,7 +173,6 @@ public class PartidaViewController implements Initializable {
             return;
         }
         
-        MiniMax minimax = new MiniMax(controladorPartida.getJugadorActual().getSimbolo());
         Movimiento mov = MiniMax.obtenerMejorMovimiento(controladorPartida.getTablero(), controladorPartida.getJugadorActual().getSimbolo());
         
         // Simulación: Supongamos que Minimax recomienda la fila 1, columna 1

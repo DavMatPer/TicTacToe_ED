@@ -79,6 +79,7 @@ public class MiniMax {
           mejorMovimiento = hijo.getRaiz().getMovimiento();
         }
       }
+      System.out.println("Mejor movimiento: " + mejorMovimiento.toString());
       return mejorMovimiento;
     }
     

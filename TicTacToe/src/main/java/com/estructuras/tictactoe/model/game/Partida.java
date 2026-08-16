@@ -117,6 +117,15 @@ public class Partida implements Serializable{
     }
 
     /**
+     * Retorna el jugador anterior.
+     * @return el jugador que jugó el turno previo.
+     */
+    public Jugador getJugadorAnterior() {
+        int indiceAnterior = (indiceJugadorActual == 0) ? 1 : 0;
+        return jugadores[indiceAnterior];
+    }
+
+    /**
      * Retorna el número de movimientos realizados en la partida.
      * @return número de movimientos realizados.
      */
