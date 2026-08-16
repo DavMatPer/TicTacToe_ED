@@ -3,6 +3,7 @@ package com.estructuras.tictactoe.model.computer;
 import java.util.List;
 import com.estructuras.tictactoe.model.game.Movimiento;
 import com.estructuras.tictactoe.model.game.Simbolo;
+import com.estructuras.tictactoe.model.game.Tablero;
 
 public class MiniMax {
     private Simbolo simboloComputadora;
@@ -79,5 +80,23 @@ public class MiniMax {
         }
       }
       return mejorMovimiento;
+    }
+    
+    public static Movimiento obtenerMejorMovimiento(Tablero tablero, Simbolo simboloJugador) {
+        ArbolTablero arbol = new ArbolTablero();
+        // Se construye el árbol a una profundidad fija. Podría ser configurable.
+        int profundidadBusqueda = 5; 
+        arbol.construirArbol(tablero, simboloJugador, profundidadBusqueda);
+
+        NodoTablero raizArbol = arbol.getRaiz();
+
+        if (raizArbol == null) {
+            return null; // No se pudo construir el árbol o el tablero está vacío/finalizado
+        }
+        
+        // Se crea una instancia de MiniMax para usar sus métodos de evaluación del árbol.
+        MiniMax miniMaxEvaluador = new MiniMax(simboloJugador);
+        
+        return miniMaxEvaluador.obtenerMejorMovimiento(raizArbol, simboloJugador);
     }
 }

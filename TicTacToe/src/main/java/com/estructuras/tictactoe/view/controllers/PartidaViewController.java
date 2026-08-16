@@ -2,6 +2,8 @@ package com.estructuras.tictactoe.view.controllers;
 
 import com.estructuras.tictactoe.controllers.PartidaController;
 import com.estructuras.tictactoe.model.computer.JugadorComputador;
+import com.estructuras.tictactoe.model.computer.MiniMax;
+import com.estructuras.tictactoe.model.game.Movimiento;
 import com.estructuras.tictactoe.model.game.Partida;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.persistencia.PartidaSerializer;
@@ -44,6 +46,7 @@ public class PartidaViewController implements Initializable {
     private PartidaController controladorPartida;
     private Button[][] matrizBotones;
     private PauseTransition transicionPista;
+    private MiniMax minimax;
 
     private final String RUTA_ARCHIVO = RutaGuardado.getRuta();
     private final String ESTILO_BOTON_NORMAL = "-fx-font-size: 56px; -fx-font-weight: bold; -fx-text-fill: #011627; -fx-background-color: white; -fx-background-radius: 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 3);";
@@ -109,19 +112,17 @@ public class PartidaViewController implements Initializable {
             actualizarVistaTablero();
         }
 
-        // 1. Invocar a la lógica de tu modelo (Asegúrate de tener un método similar en Partida)
-        // boolean movimientoValido = partidaActual.registrarMovimiento(fila, col);
-
         System.out.println("Jugador seleccionó casilla: " + fila + "," + col);
-        //TODO
-        // Que no sea la parttida quien ghaga el movimiento más bien el controlador de ella.
-        if (controladorPartida.realizarMovimiento(fila, col)) {
-            actualizarVistaTablero();
-            if(controladorPartida.isGameOver()) {
-              mostrarModalFinal();
-              return;
-            }
+        
+        if (! controladorPartida.realizarMovimiento(fila, col)) return;
+        actualizarVistaTablero();
+
+        if(controladorPartida.isGameOver()) {
+            mostrarModalFinal();
+            return;
         }
+
+        
     }
 
     private void actualizarVistaTablero() {
@@ -167,10 +168,13 @@ public class PartidaViewController implements Initializable {
         if (transicionPista != null && transicionPista.getStatus() == javafx.animation.Animation.Status.RUNNING) {
             return;
         }
-
+        
+        MiniMax minimax = new MiniMax(controladorPartida.getJugadorActual().getSimbolo());
+        Movimiento mov = MiniMax.obtenerMejorMovimiento(controladorPartida.getTablero(), controladorPartida.getJugadorActual().getSimbolo());
+        
         // Simulación: Supongamos que Minimax recomienda la fila 1, columna 1
-        int filaSugerida = 1;
-        int colSugerida = 1;
+        int filaSugerida = mov.getRow();
+        int colSugerida = mov.getCol();
 
         Button btnSugerido = matrizBotones[filaSugerida][colSugerida];
         if (false) return; //TODO que la pista no sea en una casilla ocupada.
