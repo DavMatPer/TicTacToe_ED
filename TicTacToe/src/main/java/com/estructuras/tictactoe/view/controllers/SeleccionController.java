@@ -29,11 +29,11 @@ public class SeleccionController implements Initializable {
         tgSimbolo1 = new ToggleGroup();
         rbX1.setToggleGroup(tgSimbolo1);
         rbO1.setToggleGroup(tgSimbolo1);
-
+        
         tgTipo1 = new ToggleGroup();
         rbHumano1.setToggleGroup(tgTipo1);
         rbPC1.setToggleGroup(tgTipo1);
-
+        
         tgSimbolo2 = new ToggleGroup();
         rbX2.setToggleGroup(tgSimbolo2);
         rbO2.setToggleGroup(tgSimbolo2);
@@ -87,4 +87,6 @@ public class SeleccionController implements Initializable {
             controladorPartida.setPartida(partida);
         }
     }
+
 }
+

@@ -30,6 +30,7 @@ import javafx.util.Duration;
 public class PartidaViewController implements Initializable {
 
     // --- CAPA 1: JUEGO ---
+    @FXML private Label lblPC;
     @FXML private Label lblTurno;
     @FXML private GridPane gridTablero;
 
@@ -144,12 +145,17 @@ public class PartidaViewController implements Initializable {
                         btn.getStyleClass().add("simbolo-o"); // Pinta la O de naranja
                         break;
                     default:
-                        btn.setText("");
+                        btn.setText(""); 
                         break;
                 }
             }
         }
+
         lblTurno.setText("Turno de: " + controladorPartida.getJugadorActual().getSimbolo());
+        boolean esPC = controladorPartida.getJugadorActual() instanceof JugadorComputador;
+        
+        lblPC.setVisible(esPC);
+
     }
 
     @FXML

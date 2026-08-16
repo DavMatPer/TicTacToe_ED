@@ -14,6 +14,7 @@
     <VBox alignment="CENTER" spacing="30.0" styleClass="fondo-principal" style="-fx-padding: 40;">
         
         <Label fx:id="lblTurno" text="Turno de Jugador 1" styleClass="titulo" />
+        <Label fx:id="lblPC" text="Computador" styleClass="label-jugador" />
 
         <GridPane fx:id="gridTablero" alignment="CENTER" hgap="15" vgap="15">
             <!-- Vacío en FXML, poblado en Java -->
