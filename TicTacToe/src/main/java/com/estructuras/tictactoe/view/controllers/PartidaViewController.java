@@ -64,6 +64,10 @@ public class PartidaViewController implements Initializable {
     public void setPartida(Partida partida) {
       controladorPartida = new PartidaController(partida, this);
       this.controladorPartida.iniciarPartida();
+      if (controladorPartida.estaPausada()) {
+          controladorPartida.reanudarPartida();
+      }
+      actualizarVistaTablero();
     }
 
     // ==========================================
@@ -199,6 +203,7 @@ public class PartidaViewController implements Initializable {
     @FXML
     private void mostrarModalGuardar(ActionEvent event) {
         modalGuardar.setVisible(true);
+        controladorPartida.pausarPartida();
     }
 
     @FXML
@@ -206,6 +211,7 @@ public class PartidaViewController implements Initializable {
         modalGuardar.setVisible(false);
         txtNombreGuardado.clear();
         txtNombreGuardado.setPromptText("Asigna un nombre a tu partida...");
+        controladorPartida.reanudarPartida();
     }
 
     private void ocultarModalGuardar() {

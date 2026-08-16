@@ -12,16 +12,22 @@ import javafx.util.Duration;
 public class PartidaController {
     private Partida partida;
     private PartidaViewController vistaPrincipal;
+    private PauseTransition pauseTransitionActual;
+    private boolean pausado;
     private static final double DELAY_SEGUNDOS_COMPUTADOR = 0.5;
 
     public PartidaController(Partida partida) {
       this.partida = partida;
       this.vistaPrincipal = null;
+      this.pausado = false;
+      this.pauseTransitionActual = null;
     }
 
     public PartidaController(Partida partida, PartidaViewController vista) {
       this.partida = partida;
       this.vistaPrincipal = vista;
+      this.pausado = false;
+      this.pauseTransitionActual = null;
     }
 
     /**
@@ -68,20 +74,23 @@ public class PartidaController {
     private void gestionarTurnoComputador() {
         if (! (partida.getJugadorActual() instanceof JugadorComputador) || partida.isGameOver()) 
           return;
+        if (vistaPrincipal == null) return;
         
-        PauseTransition pause = new PauseTransition(Duration.seconds(DELAY_SEGUNDOS_COMPUTADOR));
+        pauseTransitionActual = new PauseTransition(Duration.seconds(DELAY_SEGUNDOS_COMPUTADOR));
 
-        pause.setOnFinished(event -> {
+        pauseTransitionActual.setOnFinished(event -> {
+            if (pausado) return; // No ejecutar si está pausado
+            
             ejecutarMovimientoComputador();
             
-            // Actualizar la vista después del movimiento del PC
             if (vistaPrincipal != null) {
                 vistaPrincipal.actualizarVistaTablero();
             }
-            
-            // Si el juego terminó, no cambiar turno ni gestionar siguiente turno
+
             if (partida.isGameOver()) {
-                vistaPrincipal.mostrarModalFinal();
+                if (vistaPrincipal != null) {
+                    vistaPrincipal.mostrarModalFinal();
+                }
                 return;
             }
             
@@ -91,7 +100,7 @@ public class PartidaController {
             gestionarTurnoComputador();
         });
 
-        pause.play();
+        pauseTransitionActual.play();
     }
 
     /**
@@ -129,6 +138,33 @@ public class PartidaController {
 
     public Partida getPartida() {
       return partida;
+    }
+
+    /**
+     * Pausa la partida actual deteniendo el turno del computador.
+     */
+    public void pausarPartida() {
+        pausado = true;
+        if (pauseTransitionActual != null) {
+            pauseTransitionActual.stop();
+        }
+    }
+
+    /**
+     * Reanuda la partida tras estar pausada.
+     */
+    public void reanudarPartida() {
+        pausado = false;
+        if (partida.getJugadorActual() instanceof JugadorComputador && !partida.isGameOver()) {
+            gestionarTurnoComputador();
+        }
+    }
+
+    /**
+     * Retorna si la partida está pausada.
+     */
+    public boolean estaPausada() {
+        return pausado;
     }
 
 }

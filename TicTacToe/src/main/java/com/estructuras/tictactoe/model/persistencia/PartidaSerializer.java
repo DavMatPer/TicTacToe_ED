@@ -1,6 +1,7 @@
 package com.estructuras.tictactoe.model.persistencia;
 
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -66,7 +67,7 @@ public class PartidaSerializer {
         if (file.length() == 0) 
             throw new IOException("El archivo está vacío");
 
-        File temp = new File("temp.dat");
+        File temp = new File("temp.dat"); 
         RegistroPartida registroPartida = null;
         RegistroPartida registroTemp = null;
 
@@ -104,6 +105,7 @@ public class PartidaSerializer {
      */
     public static List<String> obtenerPartidasGuardadas(String rutaArchivo) throws IOException, ClassNotFoundException { 
         List<String> partidas = new LinkedList<>();
+        List<RegistroPartida> registrosValidos = new LinkedList<>();
         File file = new File(rutaArchivo);
         RegistroPartida registro = null;
 
@@ -113,7 +115,11 @@ public class PartidaSerializer {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             while ((registro = leerRegistro(ois)) != null) {
                 partidas.add(registro.getNombrePartida());
+                registrosValidos.add(registro);
             }
+        } catch (InvalidClassException e) {
+            System.err.println("Archivo corrupto o versión de clase incompatible. Se intentará recuperar las partidas válidas.");
+            sanarArchivo(registrosValidos, rutaArchivo);
         }
 
         return partidas;
@@ -124,11 +130,32 @@ public class PartidaSerializer {
      * @param ois ObjectInputStream que contiene los registros.
      * @return RegistroPartida deserializado, o null si no hay más registros.
      */
-    private static RegistroPartida leerRegistro( ObjectInputStream ois) throws IOException, ClassNotFoundException{
+    private static RegistroPartida leerRegistro( ObjectInputStream ois) throws IOException,InvalidClassException, ClassNotFoundException{
         try {
             return (RegistroPartida) ois.readObject();
         } catch (EOFException e) {
             return null;
         } 
+    }
+
+    /**
+     * Método privado que reescribe el archivo desde cero usando solo las partidas válidas.
+     * @param partidasSeguras Lista de partidas que se consideran válidas y que se desean mantener.
+     * @param rutaArchivo Ruta del archivo donde se guardarán las partidas válidas.
+     */
+    private static void sanarArchivo(List<RegistroPartida> partidasSeguras, String rutaArchivo) {
+        File archivoViejo = new File(rutaArchivo);
+        if (archivoViejo.exists()) {
+            archivoViejo.delete(); // Borramos el archivo corrupto
+        }
+
+        // Guardamos una por una las partidas que rescatamos
+        for (RegistroPartida partidaBuena : partidasSeguras) {
+            try {
+                guardarPartida(partidaBuena, rutaArchivo);
+            } catch (Exception e) {
+                System.err.println("Error al intentar sanar la partida: " + partidaBuena.getNombrePartida());
+            }
+        }
     }
 }

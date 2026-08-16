@@ -1,11 +1,13 @@
 package com.estructuras.tictactoe.model.computer;
 
+import java.io.Serializable;
 import java.util.List;
 import com.estructuras.tictactoe.model.game.Movimiento;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.game.Tablero;
 
-public class MiniMax {
+public class MiniMax implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Simbolo simboloComputadora;
     private Simbolo simboloHumano;
 

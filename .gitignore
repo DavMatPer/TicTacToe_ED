@@ -1,3 +1,4 @@
 /TicTacToe/target/
 /TicTacToe/nbproject/
 *.dat
+*.help*

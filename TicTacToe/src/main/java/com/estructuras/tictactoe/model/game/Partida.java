@@ -134,6 +134,14 @@ public class Partida implements Serializable{
     }
 
     /**
+     * Retorna el arreglo de jugadores de la partida.
+     * @return arreglo de jugadores.
+     */
+    public Jugador[] getJugadores() {
+        return jugadores;
+    }
+
+    /**
      * Escoge un jugador random para inciar.
      */
     private void escogerJugador(){    

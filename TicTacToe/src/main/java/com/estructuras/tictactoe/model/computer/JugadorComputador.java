@@ -1,12 +1,16 @@
 package com.estructuras.tictactoe.model.computer;
 
+import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import com.estructuras.tictactoe.model.game.Jugador;
 import com.estructuras.tictactoe.model.game.Movimiento;
 import com.estructuras.tictactoe.model.game.Simbolo;
 import com.estructuras.tictactoe.model.game.Tablero;
 
-public class JugadorComputador extends Jugador {
-    private MiniMax miniMax;
+public class JugadorComputador extends Jugador implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private transient MiniMax miniMax;
 
     public JugadorComputador(Simbolo simbolo) {
         super(simbolo);
@@ -26,6 +30,11 @@ public class JugadorComputador extends Jugador {
      * @return movimiento con mayor utilidad 
      */
     public Movimiento realizarMovimiento(Tablero tablero) {
+        // Recrear miniMax si fue deserializado
+        if (miniMax == null) {
+            miniMax = new MiniMax(getSimbolo());
+        }
+        
         int casillasVacias = tablero.getCasillasVacias().size();
         int profundidad = (casillasVacias <= UMBRAL_BUSQUEDA_COMPLETA)
                 ? casillasVacias
@@ -37,4 +46,11 @@ public class JugadorComputador extends Jugador {
         return miniMax.obtenerMejorMovimiento(arbol.getRaiz(), getSimbolo());
     }
 
+    /**
+     * Método readObject para deserialización: recrea MiniMax si es necesario.
+     */
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        this.miniMax = new MiniMax(getSimbolo());
+    }
 }
